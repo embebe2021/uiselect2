@@ -1,0 +1,135 @@
+@namespace "Options";
+
+.root {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.parent {
+  display: inline-block;
+  width: 100%;
+}
+
+.parentWrapper {
+  position: relative;
+  -st-states: isDoted;
+}
+
+.parentWrapper:isDoted::before {
+  content: "";
+  position: absolute;
+  width: 20px;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background-color: #fff;
+}
+
+.parentIconWrapper {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  top: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  border: 1px solid gray;
+  background-color: #fff;
+  z-index: 2;
+  -st-states: isDisable, isNotDefaultRoot;
+  cursor: pointer;
+}
+
+.parentIconWrapper:isDisable {
+  border-color: rgba(128, 128, 128, 0.4);
+}
+
+.parentIconWrapper:isNotDefaultRoot::before {
+  content: "";
+  position: absolute;
+  width: 11px;
+  height: 1px;
+  border-top: 1px dotted gray;
+  top: 50%;
+  left: -12px;
+}
+
+.parentIcon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-53%, -52%);
+  width: 10px;
+  -st-states: isOpen, isDisable;
+}
+
+.parentIcon:isOpen {
+  transform: translate(-49%, -44%) rotate(180deg);
+}
+
+.parentIcon:isDisable {
+  opacity: 0.4;
+}
+
+.parentContainer {
+  -st-states: isSingle, isDisable, isActive, isOnFocus;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-left: 2rem;
+  padding: 1rem 1rem 1rem 0.3rem;
+  cursor: pointer;
+}
+
+.parentContainer:isOnFocus {
+  background-color: #e0f6fe;
+}
+
+.parentContainer:isDisable:hover {}
+
+.parentContainer:isActive:hover {
+  background-color: #e0f6fe;
+}
+
+.parentContainer:isSingle {
+  margin-left: 0;
+}
+
+.rightSide,
+.leftSide {
+  display: inline-block;
+}
+
+.parentLabel {
+  display: inline-block;
+  -st-states: isDisable;
+  padding-left: 0.3rem;
+}
+
+.parentLabel:isDisable {
+  opacity: 0.4;
+}
+
+.childWrapper {
+  -st-states: isDotted;
+}
+
+.childWrapper:isDotted::before {
+  border-left: 1px dotted #a79d95;
+  height: calc(100% - 49px);
+  top: 29px;
+  left: 9px;
+  width: 1px;
+  content: "";
+  position: absolute;
+}
+
+.childWrapper:isDotted::after {
+  border-bottom: 1px dotted #a79d95;
+  position: absolute;
+  height: 1px;
+  bottom: 18px;
+  left: 9px;
+  width: 29px;
+  content: "";
+}

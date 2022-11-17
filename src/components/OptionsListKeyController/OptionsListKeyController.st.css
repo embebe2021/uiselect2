@@ -1,0 +1,38 @@
+@namespace 'OptionsListKeyController';
+
+.root {
+  border: 1px solid gray;
+  padding: 1rem;
+  margin-top: 1rem;
+  list-style: none;
+  overflow-y: auto;
+  max-height: 460px;
+  -st-mixin: animMixin;
+}
+
+.root::-webkit-scrollbar {
+  width: 8px;
+  background-color: transparent;
+}
+
+.root::-webkit-scrollbar-thumb {
+  border: 1px solid #a79d95;
+  border-radius: 10px;
+}
+
+.animMixin {
+  animation-name: show;
+  animation-timing-function: ease-in;
+  animation-fill-mode: forwards;
+  animation-duration: .3s;
+}
+
+@keyframes show {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}

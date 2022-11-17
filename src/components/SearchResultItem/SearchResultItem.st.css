@@ -1,0 +1,28 @@
+.root {
+    display: flex;
+    line-height: 1.8;
+    padding: 0.5rem;
+    -st-states: isOnHover, isOnFocus;
+    cursor: pointer;
+}
+
+.root:not(:nth-child(1), :nth-last-child(1)) {
+    border-bottom: 1px solid gray;
+}
+
+.root:isOnHover {
+    background-color: #e0f6fe;
+}
+
+.root:isOnFocus {
+    background-color: #e0f6fe;
+}
+
+.infoWrapper {
+    padding-left: .5rem;
+}
+
+.path {
+    font-size: 1.3rem;
+    opacity: 0.4;
+}

@@ -1,0 +1,60 @@
+.root {
+  line-height: 3rem;
+}
+
+.wrapper {
+  position: relative;
+  height: 30px;
+  border: 1px solid gray;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.input {
+  outline: none;
+  border: none;
+  padding: 5px;
+  position: relative;
+  width: 100%;
+  background-color: transparent;
+}
+
+.input::placeholder {
+  font-style: italic;
+}
+
+.iconWrapper {
+  display: inline-block;
+  width: 20px;
+  margin-right: 15px;
+}
+
+.icon {
+  fill: gray;
+  vertical-align: middle;
+  -st-mixin: animMixin;
+  -st-states: isActive;
+}
+
+.icon:isActive {
+  fill: #007bdb;
+}
+
+.animMixin {
+  animation-name: show;
+  animation-timing-function: ease-in;
+  animation-fill-mode: forwards;
+  animation-duration: .3s;
+}
+
+@keyframes show {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
