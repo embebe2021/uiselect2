@@ -101,6 +101,7 @@ const SearchResultItem = ({
       className={st(classes.root, {
         isOnHover: hoverIndex === dataIndex,
         isOnFocus: optionOnFocus === index,
+        isChecked: originData.selected,
       })}
       data-option={true}
       data-group={thisChild?.length > 0 && true}

@@ -2,12 +2,16 @@
     display: flex;
     line-height: 1.8;
     padding: 0.5rem;
-    -st-states: isOnHover, isOnFocus;
+    -st-states: isOnHover, isOnFocus, isChecked;
     cursor: pointer;
 }
 
 .root:not(:nth-child(1), :nth-last-child(1)) {
-    border-bottom: 1px solid gray;
+    border-bottom: 1px solid #adadad;
+}
+
+.root:isChecked {
+    background-color: #e0f6fe;
 }
 
 .root:isOnHover {
