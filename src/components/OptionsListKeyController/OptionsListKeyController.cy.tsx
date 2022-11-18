@@ -1,23 +1,20 @@
 import { mount } from "cypress/react";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 import { Provider } from "react-redux";
 import { data } from "../../data/data";
 import { updateSearchResult } from "../../stores/ReduxStore";
 import store from "../../stores/store";
 import OptionsListKeyController from "./OptionsListKeyController";
 
-// searchMode?: "offline" | "online";
-//   showMode?: "single" | "tree" | "optgroup";
-//   selectionMode?: "single" | "multi";
-//   isShowDropdown?: boolean;
-//   isOnSearch?: boolean;
-//   defaultShowInfo?: boolean;
-
 const selectContainer = '[data-hook="selectContainer"]';
 
 it("should mount with store and default value", () => {
   mount(
     <Provider store={store}>
-      <OptionsListKeyController></OptionsListKeyController>
+      <DndProvider backend={HTML5Backend}>
+        <OptionsListKeyController></OptionsListKeyController>
+      </DndProvider>
     </Provider>
   );
 });
@@ -25,7 +22,9 @@ it("should mount with store and default value", () => {
 it("show single options", () => {
   mount(
     <Provider store={store}>
-      <OptionsListKeyController showMode="single"></OptionsListKeyController>
+      <DndProvider backend={HTML5Backend}>
+        <OptionsListKeyController showMode="single"></OptionsListKeyController>
+      </DndProvider>
     </Provider>
   );
   cy.get(selectContainer).should("be.visible");
@@ -34,7 +33,9 @@ it("show single options", () => {
 it("show tree options", () => {
   mount(
     <Provider store={store}>
-      <OptionsListKeyController showMode="tree"></OptionsListKeyController>
+      <DndProvider backend={HTML5Backend}>
+        <OptionsListKeyController showMode="tree"></OptionsListKeyController>
+      </DndProvider>
     </Provider>
   );
   cy.get(selectContainer).should("be.visible");
@@ -43,7 +44,9 @@ it("show tree options", () => {
 it("show optgroup options", () => {
   mount(
     <Provider store={store}>
-      <OptionsListKeyController showMode="optgroup"></OptionsListKeyController>
+      <DndProvider backend={HTML5Backend}>
+        <OptionsListKeyController showMode="optgroup"></OptionsListKeyController>
+      </DndProvider>
     </Provider>
   );
   cy.get(selectContainer).should("be.visible");
@@ -52,7 +55,9 @@ it("show optgroup options", () => {
 it("select single options", () => {
   mount(
     <Provider store={store}>
-      <OptionsListKeyController selectionMode="single"></OptionsListKeyController>
+      <DndProvider backend={HTML5Backend}>
+        <OptionsListKeyController selectionMode="single"></OptionsListKeyController>
+      </DndProvider>
     </Provider>
   );
   cy.get(selectContainer).should("be.visible");

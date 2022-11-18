@@ -95,7 +95,7 @@ describe("Test UISelect", () => {
     function recusionClick() {
       cy.get(`[data-hook="options${counter}"]`).click();
       counter++;
-      if (counter < 65) {
+      if (counter < 7) {
         recusionClick();
       }
     }

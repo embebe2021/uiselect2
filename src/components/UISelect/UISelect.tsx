@@ -29,8 +29,8 @@ const UISelect = ({
 
   useEffect(() => {
     const clickOutControl = (e: MouseEvent): void => {
-      // if (uiRef.current && !uiRef.current.contains(e.target as Element))
-      //   handleShowDropdown();
+      if (uiRef.current && !uiRef.current.contains(e.target as Element))
+        handleShowDropdown();
     };
     document.addEventListener("click", clickOutControl);
     return () => document.removeEventListener("click", clickOutControl);

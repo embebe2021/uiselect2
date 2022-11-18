@@ -5,7 +5,7 @@
 .wrapper {
   position: relative;
   height: 30px;
-  border: 1px solid gray;
+  border: 1px solid #adadad;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -27,12 +27,12 @@
 
 .iconWrapper {
   display: inline-block;
-  width: 20px;
+  width: 16px;
   margin-right: 15px;
 }
 
 .icon {
-  fill: gray;
+  fill: #41362f;
   vertical-align: middle;
   -st-mixin: animMixin;
   -st-states: isActive;

@@ -41,7 +41,7 @@ const SelectedList = ({
 
   return (
     <div
-      className={classes.root}
+      className={st(classes.root, { showDropdown })}
       data-type="optionSelectList"
       data-hook="uiSelectList"
       onClick={() => toggleDropdown()}

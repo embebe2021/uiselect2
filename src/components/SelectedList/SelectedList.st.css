@@ -2,16 +2,22 @@
 
 .root {
   position: relative;
-  border: 1px solid gray;
+  border: 1px solid #adadad;
   width: 100%;
   min-height: 31px;
   width: 630px;
   cursor: pointer;
+  -st-states: showDropdown;
+}
+
+.root:showDropdown {
+  border: 1px solid #007bdb;
 }
 
 .selectedContainer {
   position: relative;
   padding-right: 60px;
+  background-color: #fff;
 }
 
 .selectedWrapper {

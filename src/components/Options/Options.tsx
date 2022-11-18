@@ -42,6 +42,7 @@ const Options = (props: OptionsProps): JSX.Element => {
   const option = transformData[dataIndex] as OptionsType;
   const childs = option?.child;
   const margin = initialMargin + marginIncrease;
+  const uId = option.data.uid;
 
   const isOptionDisable = showMode === "optgroup" && childs.length > 0;
 
@@ -102,7 +103,7 @@ const Options = (props: OptionsProps): JSX.Element => {
     type: "option",
     item: () => {
       if (!isOptionDisable) {
-        return { id: dataIndex };
+        return { id: uId };
       } else {
         return null;
       }
@@ -112,36 +113,16 @@ const Options = (props: OptionsProps): JSX.Element => {
     }),
   }));
 
-  const [{ isOver, canDrop }, drop] = useDrop(() => ({
+  const [{ isOver }, drop] = useDrop(() => ({
     accept: "option",
     drop: (item) => handleDrop(item),
     collect: (monitor) => ({
       isOver: !!monitor.isOver(),
-      // canDrop: !!monitor.canDrop(),
     }),
-    canDrop: (item, monitor) => handleCanDrop(item, monitor),
   }));
 
-  const handleCanDrop = ({ id }, monitor) => {
-    // console.log("canDrop");
-    const fromIndex = id;
-    // console.log(
-    //   "🚀 ~ file: Options.tsx ~ line 126 ~ handleDrop ~ fromIndex",
-    //   fromIndex
-    // );
-    const toIndex = dataIndex;
-    // console.log(
-    //   "🚀 ~ file: Options.tsx ~ line 128 ~ handleDrop ~ toIndex",
-    //   toIndex
-    // );
-    if (fromIndex === toIndex) {
-      return false;
-    }
-    return true;
-  };
-
   const handleDrop = ({ id }) => {
-    // const fromIndex = id;
+    const fromIndex = id;
     // console.log(
     //   "🚀 ~ file: Options.tsx ~ line 126 ~ handleDrop ~ fromIndex",
     //   fromIndex
@@ -189,33 +170,26 @@ const Options = (props: OptionsProps): JSX.Element => {
             )}
           </>
         )}
-
         <div
-          ref={drop}
-          // style={{
-          //   backgroundColor: `${isDragging ? "red" : "blue"}`,
-          // }}
-          className={st(classes.dropContainer, {
-            isDragging: isDragging,
+          data-hook="parentOptions"
+          className={st(classes.parent, {
+            needClear:
+              childs?.length > 0 && isLastChild && showMode !== "single",
           })}
         >
-          <div
-            ref={drag}
-            data-hook="parentOptions"
-            className={st(classes.parent, {
-              needClear: childs?.length > 0 && isLastChild,
-            })}
-          >
+          <div ref={drop} className={classes.dropContainer}>
             <div
-              data-hook={`options${option.index}`}
               data-option={isOptionDisable ? false : true}
-              data-group={childs?.length > 0 && true}
+              data-hook={`options${option.index}`}
               data-index={dataIndex}
+              data-group={childs?.length > 0 && true}
               onMouseEnter={handleMouseOver}
               onClick={(e) => handleCheckOption(e)}
+              ref={drag}
               className={st(classes.parentContainer, {
                 isSingle: showMode === "single",
                 isActive: showMode !== "optgroup" || childs.length === 0,
+                isChecked: option?.selected,
                 isDisable: isOptionDisable,
                 isOnFocus: optionOnFocus === dataIndex,
               })}
@@ -245,49 +219,49 @@ const Options = (props: OptionsProps): JSX.Element => {
                 </div>
               )}
             </div>
-            {_.size(childs) > 0 &&
-              showChild &&
-              showMode === "tree" &&
-              _.map(childs, (childIndex) => (
-                <div
-                  data-hook="childOptions"
-                  className={st(classes.childWrapper, {
-                    isDotted: showMode === "tree",
-                  })}
-                  style={getStyleMargin()}
-                  key={nanoid()}
-                >
-                  <Options
-                    dataIndex={childIndex}
-                    initialMargin={margin}
-                    showMode={showMode}
-                    selectionMode={selectionMode}
-                    defaultShowInfo={defaultShowInfo}
-                  />
-                </div>
-              ))}
-
-            {_.size(childs) > 0 &&
-              (showMode === "single" || showMode === "optgroup") &&
-              _.map(childs, (childIndex) => (
-                <div
-                  data-hook="childOptions"
-                  className={st(classes.childWrapper, {
-                    isDotted: showMode === "optgroup",
-                  })}
-                  style={getStyleMargin()}
-                  key={nanoid()}
-                >
-                  <Options
-                    dataIndex={childIndex}
-                    initialMargin={margin}
-                    showMode={showMode}
-                    selectionMode={selectionMode}
-                    defaultShowInfo={defaultShowInfo}
-                  />
-                </div>
-              ))}
           </div>
+          {_.size(childs) > 0 &&
+            showChild &&
+            showMode === "tree" &&
+            _.map(childs, (childIndex) => (
+              <div
+                data-hook="childOptions"
+                className={st(classes.childWrapper, {
+                  isDotted: showMode === "tree",
+                })}
+                style={getStyleMargin()}
+                key={nanoid()}
+              >
+                <Options
+                  dataIndex={childIndex}
+                  initialMargin={margin}
+                  showMode={showMode}
+                  selectionMode={selectionMode}
+                  defaultShowInfo={defaultShowInfo}
+                />
+              </div>
+            ))}
+
+          {_.size(childs) > 0 &&
+            (showMode === "single" || showMode === "optgroup") &&
+            _.map(childs, (childIndex) => (
+              <div
+                data-hook="childOptions"
+                className={st(classes.childWrapper, {
+                  isDotted: showMode === "optgroup",
+                })}
+                style={getStyleMargin()}
+                key={nanoid()}
+              >
+                <Options
+                  dataIndex={childIndex}
+                  initialMargin={margin}
+                  showMode={showMode}
+                  selectionMode={selectionMode}
+                  defaultShowInfo={defaultShowInfo}
+                />
+              </div>
+            ))}
         </div>
       </div>
     </div>

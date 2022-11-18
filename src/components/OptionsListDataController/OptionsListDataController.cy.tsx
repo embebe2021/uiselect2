@@ -1,4 +1,6 @@
 import { mount } from "cypress/react";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 import { Provider } from "react-redux";
 import { data } from "../../data/data";
 import { searching, updateSearchResult } from "../../stores/ReduxStore";
@@ -8,7 +10,9 @@ import OptionsListDataController from "./OptionsListDataController";
 it("should mount with store and default value", () => {
   mount(
     <Provider store={store}>
-      <OptionsListDataController></OptionsListDataController>
+      <DndProvider backend={HTML5Backend}>
+        <OptionsListDataController></OptionsListDataController>
+      </DndProvider>
     </Provider>
   );
 });
@@ -18,7 +22,11 @@ it("show loader on search", () => {
   const searchLoader = '[data-hook="searchLoader"]';
   mount(
     <Provider store={store}>
-      <OptionsListDataController isOnSearch={true}></OptionsListDataController>
+      <DndProvider backend={HTML5Backend}>
+        <OptionsListDataController
+          isOnSearch={true}
+        ></OptionsListDataController>
+      </DndProvider>
     </Provider>
   );
   cy.get(searchLoader).should("be.visible");

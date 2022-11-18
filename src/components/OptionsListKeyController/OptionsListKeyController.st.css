@@ -1,8 +1,8 @@
 @namespace 'OptionsListKeyController';
 
 .root {
-  border: 1px solid gray;
-  padding: 1rem;
+  border-top: 1px solid #e3e3e3;
+  border-bottom: 1px solid #e3e3e3;
   margin-top: 1rem;
   list-style: none;
   overflow-y: auto;
@@ -16,8 +16,7 @@
 }
 
 .root::-webkit-scrollbar-thumb {
-  border: 1px solid #a79d95;
-  border-radius: 10px;
+  border: 1px solid gray;
 }
 
 .animMixin {

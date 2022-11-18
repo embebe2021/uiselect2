@@ -103,7 +103,7 @@
 }
 
 .parentContainer {
-  -st-states: isSingle, isDisable, isActive, isOnFocus;
+  -st-states: isSingle, isDisable, isActive, isOnFocus, isChecked;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -112,14 +112,18 @@
   cursor: pointer;
 }
 
-.parentContainer:isOnFocus {
+.parentContainer:isChecked {
   background-color: #e0f6fe;
+}
+
+.parentContainer:isOnFocus {
+  background-color: #e3e3e3;
 }
 
 .parentContainer:isDisable:hover {}
 
 .parentContainer:isActive:hover {
-  background-color: #e0f6fe;
+  background-color: #e3e3e3;
 }
 
 .parentContainer:isSingle {
@@ -166,9 +170,5 @@
 }
 
 .dropContainer {
-  -st-states: isDragging;
-}
-
-.dropContainer:isDragging {
-  background-color: red;
+  /* -st-states: isDragging; */
 }
