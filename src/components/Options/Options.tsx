@@ -10,6 +10,7 @@ import {
   setHoverIndex,
 } from "../../stores/ReduxStore";
 import { st, classes } from "./Options.st.css";
+import { useDrag, useDrop } from "react-dnd";
 
 type OptionsProps = {
   showMode?: "single" | "tree" | "optgroup";
@@ -97,6 +98,62 @@ const Options = (props: OptionsProps): JSX.Element => {
     }
   };
 
+  const [{ isDragging }, drag] = useDrag(() => ({
+    type: "option",
+    item: () => {
+      if (!isOptionDisable) {
+        return { id: dataIndex };
+      } else {
+        return null;
+      }
+    },
+    collect: (monitor) => ({
+      isDragging: !!monitor.isDragging(),
+    }),
+  }));
+
+  const [{ isOver, canDrop }, drop] = useDrop(() => ({
+    accept: "option",
+    drop: (item) => handleDrop(item),
+    collect: (monitor) => ({
+      isOver: !!monitor.isOver(),
+      // canDrop: !!monitor.canDrop(),
+    }),
+    canDrop: (item, monitor) => handleCanDrop(item, monitor),
+  }));
+
+  const handleCanDrop = ({ id }, monitor) => {
+    // console.log("canDrop");
+    const fromIndex = id;
+    // console.log(
+    //   "🚀 ~ file: Options.tsx ~ line 126 ~ handleDrop ~ fromIndex",
+    //   fromIndex
+    // );
+    const toIndex = dataIndex;
+    // console.log(
+    //   "🚀 ~ file: Options.tsx ~ line 128 ~ handleDrop ~ toIndex",
+    //   toIndex
+    // );
+    if (fromIndex === toIndex) {
+      return false;
+    }
+    return true;
+  };
+
+  const handleDrop = ({ id }) => {
+    // const fromIndex = id;
+    // console.log(
+    //   "🚀 ~ file: Options.tsx ~ line 126 ~ handleDrop ~ fromIndex",
+    //   fromIndex
+    // );
+    // const toIndex = dataIndex;
+    // console.log(
+    //   "🚀 ~ file: Options.tsx ~ line 128 ~ handleDrop ~ toIndex",
+    //   toIndex
+    // );
+    // dispatch(swapTableColumn({ from: dragItemId, to: columnId }));
+  };
+
   return (
     <div data-hook="optionsRoot" className={classes.root}>
       <div
@@ -105,109 +162,132 @@ const Options = (props: OptionsProps): JSX.Element => {
         })}
       >
         {(showMode === "tree" || showMode === "optgroup") && (
-          <label
-            className={st(classes.parentIconWrapper, {
-              isDisable: isOptionDisable,
-              isNotDefaultRoot: dataIndex !== 0,
-            })}
-            onClick={(e) => handleShowChild(e)}
-          >
-            {childs?.length > 0 && (
-              <div
-                className={st(classes.parentIcon, {
-                  isOpen: showChild,
-                  isDisable: showMode === "optgroup",
+          <>
+            {childs?.length > 0 ? (
+              <label
+                className={st(classes.parentIconWrapper, {
+                  isDisable: isOptionDisable,
+                  isNotDefaultRoot: dataIndex !== 0,
                 })}
+                onClick={(e) => handleShowChild(e)}
               >
-                <svg viewBox="0 0 512 512">
-                  <path d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z" />
-                </svg>
-              </div>
+                {childs?.length > 0 && (
+                  <div
+                    className={st(classes.parentIcon, {
+                      isOpen: showChild,
+                      isDisable: showMode === "optgroup",
+                    })}
+                  >
+                    <svg viewBox="0 0 512 512">
+                      <path d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z" />
+                    </svg>
+                  </div>
+                )}
+              </label>
+            ) : (
+              <div className={classes.parentSeparator}></div>
             )}
-          </label>
+          </>
         )}
 
-        <div data-hook="parentOptions" className={classes.parent}>
+        <div
+          ref={drop}
+          // style={{
+          //   backgroundColor: `${isDragging ? "red" : "blue"}`,
+          // }}
+          className={st(classes.dropContainer, {
+            isDragging: isDragging,
+          })}
+        >
           <div
-            data-hook={`options${option.index}`}
-            data-option={isOptionDisable ? false : true}
-            data-group={childs?.length > 0 && true}
-            data-index={dataIndex}
-            onMouseEnter={handleMouseOver}
-            onClick={(e) => handleCheckOption(e)}
-            className={st(classes.parentContainer, {
-              isSingle: showMode === "single",
-              isActive: showMode !== "optgroup" || childs.length === 0,
-              isDisable: isOptionDisable,
-              isOnFocus: optionOnFocus === dataIndex,
+            ref={drag}
+            data-hook="parentOptions"
+            className={st(classes.parent, {
+              needClear: childs?.length > 0 && isLastChild,
             })}
           >
-            <div className={classes.leftSide}>
-              {isOptionDisable ? null : (
-                <input
-                  readOnly
-                  type="checkbox"
-                  className={classes.parentInput}
-                  checked={option?.selected}
-                />
+            <div
+              data-hook={`options${option.index}`}
+              data-option={isOptionDisable ? false : true}
+              data-group={childs?.length > 0 && true}
+              data-index={dataIndex}
+              onMouseEnter={handleMouseOver}
+              onClick={(e) => handleCheckOption(e)}
+              className={st(classes.parentContainer, {
+                isSingle: showMode === "single",
+                isActive: showMode !== "optgroup" || childs.length === 0,
+                isDisable: isOptionDisable,
+                isOnFocus: optionOnFocus === dataIndex,
+              })}
+            >
+              <div className={classes.leftSide}>
+                {isOptionDisable ? null : (
+                  <input
+                    readOnly
+                    type="checkbox"
+                    className={classes.parentInput}
+                    checked={option?.selected}
+                  />
+                )}
+                <span
+                  className={st(classes.parentLabel, {
+                    isDisable: isOptionDisable,
+                  })}
+                >
+                  {option?.data?.label}
+                </span>
+              </div>
+              {defaultShowInfo && (
+                <div className={classes.rightSide}>
+                  <span>Childs: {childs?.length}</span>
+                  {/* <span>--DataIndex: {dataIndex}--</span> */}
+                  <span> - Option level: {optionLevel}</span>
+                </div>
               )}
-              <span
-                className={st(classes.parentLabel, {
-                  isDisable: isOptionDisable,
-                })}
-              >
-                {option?.data?.label}
-              </span>
             </div>
-            {defaultShowInfo && (
-              <div className={classes.rightSide}>
-                <span>Childs: {childs?.length}</span>
-                <span> - Option level: {optionLevel}</span>
-              </div>
-            )}
-          </div>
-          {_.size(childs) > 0 &&
-            showChild &&
-            showMode === "tree" &&
-            _.map(childs, (childIndex) => (
-              <div
-                data-hook="childOptions"
-                className={st(classes.childWrapper, {
-                  isDotted: showMode === "tree",
-                })}
-                style={getStyleMargin()}
-                key={nanoid()}
-              >
-                <Options
-                  dataIndex={childIndex}
-                  initialMargin={margin}
-                  showMode={showMode}
-                  selectionMode={selectionMode}
-                  defaultShowInfo={defaultShowInfo}
-                />
-              </div>
-            ))}
+            {_.size(childs) > 0 &&
+              showChild &&
+              showMode === "tree" &&
+              _.map(childs, (childIndex) => (
+                <div
+                  data-hook="childOptions"
+                  className={st(classes.childWrapper, {
+                    isDotted: showMode === "tree",
+                  })}
+                  style={getStyleMargin()}
+                  key={nanoid()}
+                >
+                  <Options
+                    dataIndex={childIndex}
+                    initialMargin={margin}
+                    showMode={showMode}
+                    selectionMode={selectionMode}
+                    defaultShowInfo={defaultShowInfo}
+                  />
+                </div>
+              ))}
 
-          {_.size(childs) > 0 &&
-            (showMode === "single" || showMode === "optgroup") &&
-            _.map(childs, (childIndex) => (
-              <div
-                data-hook="childOptions"
-                className={st(classes.childWrapper, {
-                  isDotted: showMode === "optgroup",
-                })}
-                style={getStyleMargin()}
-                key={nanoid()}
-              >
-                <Options
-                  dataIndex={childIndex}
-                  initialMargin={margin}
-                  showMode={showMode}
-                  selectionMode={selectionMode}
-                  defaultShowInfo={defaultShowInfo}
-                />
-              </div>
-            ))}
+            {_.size(childs) > 0 &&
+              (showMode === "single" || showMode === "optgroup") &&
+              _.map(childs, (childIndex) => (
+                <div
+                  data-hook="childOptions"
+                  className={st(classes.childWrapper, {
+                    isDotted: showMode === "optgroup",
+                  })}
+                  style={getStyleMargin()}
+                  key={nanoid()}
+                >
+                  <Options
+                    dataIndex={childIndex}
+                    initialMargin={margin}
+                    showMode={showMode}
+                    selectionMode={selectionMode}
+                    defaultShowInfo={defaultShowInfo}
+                  />
+                </div>
+              ))}
+          </div>
         </div>
       </div>
     </div>

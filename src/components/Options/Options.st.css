@@ -9,6 +9,19 @@
 .parent {
   display: inline-block;
   width: 100%;
+  position: relative;
+  -st-states: needClear;
+}
+
+.parent:needClear::before {
+  content: "";
+  position: absolute;
+  top: 21px;
+  left: -13px;
+  height: calc(100% - 21px);
+  width: 21px;
+  background-color: #fff;
+  z-index: 5;
 }
 
 .parentWrapper {
@@ -35,7 +48,7 @@
   display: inline-block;
   border: 1px solid gray;
   background-color: #fff;
-  z-index: 2;
+  z-index: 6;
   -st-states: isDisable, isNotDefaultRoot;
   cursor: pointer;
 }
@@ -53,6 +66,24 @@
   top: 50%;
   left: -12px;
 }
+
+.parentSeparator {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  top: 10px;
+}
+
+.parentSeparator::before {
+  content: "";
+  position: absolute;
+  width: 28px;
+  height: 1px;
+  border-top: 1px dotted gray;
+  top: 50%;
+  left: -10px;
+}
+
 
 .parentIcon {
   position: absolute;
@@ -132,4 +163,12 @@
   left: 9px;
   width: 29px;
   content: "";
+}
+
+.dropContainer {
+  -st-states: isDragging;
+}
+
+.dropContainer:isDragging {
+  background-color: red;
 }

@@ -1,5 +1,7 @@
 import "../../globals.st.css";
 import { useEffect, useRef, useState } from "react";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 import ButtonDone from "../ButtonDone";
 import OptionsListKeyController from "../OptionsListKeyController";
 import SelectedList from "../SelectedList";
@@ -27,8 +29,8 @@ const UISelect = ({
 
   useEffect(() => {
     const clickOutControl = (e: MouseEvent): void => {
-      if (uiRef.current && !uiRef.current.contains(e.target as Element))
-        handleShowDropdown();
+      // if (uiRef.current && !uiRef.current.contains(e.target as Element))
+      //   handleShowDropdown();
     };
     document.addEventListener("click", clickOutControl);
     return () => document.removeEventListener("click", clickOutControl);
@@ -40,27 +42,32 @@ const UISelect = ({
   };
 
   return (
-    <div data-hook="uiSelectWrapper" className={classes.root} ref={uiRef}>
-      <SelectedList
-        selectionMode={defaultSelectionMode}
-        searchMode={defaultSearchMode}
-        toggleDropdown={handleShowDropdown}
-        showDropdown={showDropdown}
-      />
-      {showDropdown && (
-        <div data-hook="dropdownWrapper" className={classes.dropdownWrapper}>
-          <SearchBar setOnSearch={setOnSearch} searchMode={defaultSearchMode} />
-          <OptionsListKeyController
-            showMode={defaultShowMode}
-            selectionMode={defaultSelectionMode}
-            isOnSearch={onSearch}
-            searchMode={defaultSearchMode}
-            defaultShowInfo={defaultShowInfo}
-          />
-          <ButtonDone toggleDropdown={handleShowDropdown} />
-        </div>
-      )}
-    </div>
+    <DndProvider backend={HTML5Backend}>
+      <div data-hook="uiSelectWrapper" className={classes.root} ref={uiRef}>
+        <SelectedList
+          selectionMode={defaultSelectionMode}
+          searchMode={defaultSearchMode}
+          toggleDropdown={handleShowDropdown}
+          showDropdown={showDropdown}
+        />
+        {showDropdown && (
+          <div data-hook="dropdownWrapper" className={classes.dropdownWrapper}>
+            <SearchBar
+              setOnSearch={setOnSearch}
+              searchMode={defaultSearchMode}
+            />
+            <OptionsListKeyController
+              showMode={defaultShowMode}
+              selectionMode={defaultSelectionMode}
+              isOnSearch={onSearch}
+              searchMode={defaultSearchMode}
+              defaultShowInfo={defaultShowInfo}
+            />
+            <ButtonDone toggleDropdown={handleShowDropdown} />
+          </div>
+        )}
+      </div>
+    </DndProvider>
   );
 };
 
